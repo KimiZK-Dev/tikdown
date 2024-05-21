@@ -1,6 +1,6 @@
-const link =
-  "https://www.tiktok.com/@huymecosplay.03/video/7364636879498628360";
-const link2 = "https://www.tiktok.com/@hp.12th5/photo/7358837722028510471";
+// const link =
+//   "https://www.tiktok.com/@huymecosplay.03/video/7364636879498628360";
+// const link2 = "https://www.tiktok.com/@hp.12th5/photo/7358837722028510471";
 const apiLink = "https://www.tikwm.com/api/?url=";
 const size = document.querySelector(".size");
 const ID = document.querySelector(".authorID");
@@ -17,6 +17,10 @@ const music = document.querySelector(".music");
 function getData(api, url) {
   axios.get(`${api}${url}`).then((res) => {
     const data = res.data.data;
+    const durationInMinutes = Math.floor(data.duration / 60);
+    const remainingSeconds = data.duration % 60;
+    const formattedDuration = `${durationInMinutes} phút ${remainingSeconds} giây`;
+
     size.innerHTML = "Dung lượng: " + (data.size / 1000000).toFixed(3) + "MB";
     ID.innerHTML = "UserID: " + data.author.unique_id;
     nickname.innerHTML = "Tên tài khoản: " + data.author.nickname;
@@ -24,7 +28,7 @@ function getData(api, url) {
     comment_count.innerHTML = "Số bình luận: " + data.comment_count;
     digg_count.innerHTML = "Số tim: " + data.digg_count;
     download_count.innerHTML = "Số lượt tải xuống: " + data.download_count;
-    duration.innerHTML = "Thời gian bài viết: " + data.duration;
+    duration.innerHTML = "Thời gian bài viết: " + formattedDuration;
     play.innerHTML = "Số lượt xem: " + data.play_count;
     video.href = data.play;
     createTag(music, data.music);
@@ -41,17 +45,28 @@ function createTag(element, data) {
   element.appendChild(link);
 }
 
-getData(apiLink, link);
-
-const input = document.querySelector(".input-btn");
-const lengthIndicator = document.querySelector(".number");
 const submitButton = document.querySelector(".enter-btn");
+const submitButton2 = document.querySelector(".input-btn");
+function search() {
+  const input = document.querySelector(".input-btn").value;
+  getData(apiLink, input);
+  document.querySelector(".input-btn").value = "";
+}
 
-submitButton.addEventListener("click", () => {
-  alert(input.value);
-  console.log("INPUT: " + input.value);
+submitButton.addEventListener("click", search);
+submitButton2.addEventListener("keyup", function (event) {
+  if (event.key == "Enter") {
+    search();
+  }
 });
 
-input.addEventListener("keyup", () => {
-  lengthIndicator.innerHTML = `Độ dài kí tự: ${input.value.length}`;
+const pasteBtn = document.querySelector(".paste-btn");
+const clearBtn = document.querySelector(".clear-btn");
+pasteBtn.addEventListener("click", async () => {
+  const paste = await navigator.clipboard.readText();
+  document.querySelector(".input-btn").value = paste;
+  console.log(paste);
+});
+clearBtn.addEventListener("click", async () => {
+  document.querySelector(".input-btn").value = " ";
 });
