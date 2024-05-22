@@ -10,6 +10,9 @@ const play = document.querySelector(".play_count");
 const duration = document.querySelector(".duration");
 const video = document.querySelector(".video");
 const music = document.querySelector(".music");
+const imgPreview = document.querySelector(".preview img");
+const downVid = document.querySelector(".downVid");
+const downAudio = document.querySelector(".downAudio");
 
 function getData(api, url) {
   axios.get(`${api}${url}`).then((res) => {
@@ -30,6 +33,9 @@ function getData(api, url) {
       download_count.innerHTML = "Số lượt tải xuống: " + data.download_count;
       duration.innerHTML = "Thời gian bài viết: " + formattedDuration;
       play.innerHTML = "Số lượt xem: " + data.play_count;
+      imgPreview.src = data.ai_dynamic_cover;
+      test(downVid, data.play);
+      test(downAudio, data.music);
 
       const srcMusic = document.querySelector(".music .previewURL");
       const srcVideo = document.querySelector(".video .previewURL");
@@ -83,19 +89,28 @@ function createTag(element, data) {
   createTag.target = "_blank";
   element.appendChild(createTag);
 }
-function createDownloadTag(element, data) {
+// function createDownloadTag(element, data) {
+//   fetch(data)
+//     .then((res) => res.blob())
+//     .then((blob) => {
+//       const file = new File([blob], "image", { type: blob.type });
+//       const url = URL.createObjectURL(file);
+//       console.log(url);
+//       const createTag = document.createElement("a");
+//       createTag.textContent = "Nhấp vào đây để tải!";
+//       createTag.className = "downURL";
+//       createTag.href = url;
+//       createTag.download = "Tiktok Download by KimiZK";
+//       element.appendChild(createTag);
+//     });
+// }
+function test(element, data) {
   fetch(data)
     .then((res) => res.blob())
     .then((blob) => {
       const file = new File([blob], "image", { type: blob.type });
       const url = URL.createObjectURL(file);
-      console.log(url);
-      const createTag = document.createElement("a");
-      createTag.textContent = "Nhấp vào đây để tải!";
-      createTag.className = "downURL";
-      createTag.href = url;
-      createTag.download = "Tiktok Download by KimiZK";
-      element.appendChild(createTag);
+      element.href = url;
     });
 }
 
