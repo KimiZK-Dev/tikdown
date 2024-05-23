@@ -8,8 +8,9 @@ const digg_count = document.querySelector(".digg_count");
 const download_count = document.querySelector(".download_count");
 const play = document.querySelector(".play_count");
 const duration = document.querySelector(".duration");
-const video = document.querySelector(".video");
-const music = document.querySelector(".music");
+const preview = document.querySelector(".preview");
+const pic = document.querySelector(".pic");
+const pics = document.querySelector(".pics");
 const imgPreview = document.querySelector(".preview img");
 const downVid = document.querySelector(".downVid");
 const downAudio = document.querySelector(".downAudio");
@@ -24,7 +25,12 @@ function getData(api, url) {
       const remainingSeconds = data.duration % 60;
       const formattedDuration = `${durationInMinutes} phút ${remainingSeconds} giây`;
 
-      size.innerHTML = "Dung lượng: " + (data.size / 1000000).toFixed(3) + "MB";
+      size.innerHTML =
+        "Dung lượng: " +
+        (data.size
+          ? (data.size / 1000000).toFixed(3) + "MB"
+          : "Mỗi ảnh kích thước khác nhau!");
+
       ID.innerHTML = "UserID: " + data.author.unique_id;
       nickname.innerHTML = "Tên tài khoản: " + data.author.nickname;
       title.innerHTML = "Tiêu đề bài viết: " + data.title;
@@ -37,40 +43,26 @@ function getData(api, url) {
       test(downVid, data.play);
       test(downAudio, data.music);
 
-      const srcMusic = document.querySelector(".music .previewURL");
-      const srcVideo = document.querySelector(".video .previewURL");
-      const downVideo = document.querySelector(".video .downURL");
-      const downMusic = document.querySelector(".music .downURL");
       if (data.images) {
+        if (preview) {
+          preview.remove();
+        } else {
+          console.log("ok");
+          pic.remove();
+        }
+        const picsElement = document.querySelector(".pics");
         for (let i = 0; i < data.images.length; i++) {
-          const anchor = document.createElement("a");
-          anchor.href = data.images[i];
-          anchor.target = "_blank";
-          anchor.textContent = `Ảnh ${i + 1}`;
-
-          document.getElementById("t").appendChild(anchor);
-
-          console.log(data.images[i]);
-          video.innerHTML = "LINK NAY DELL CO VIDEO";
+          const picsCLass = document.createElement("div");
+          picsCLass.classList.add("pic");
+          const pic = document.createElement("img");
+          pic.src = data.images[i];
+          pic.alt = `Preview ${i}`;
+          picsCLass.appendChild(pic);
+          picsElement.appendChild(picsCLass);
         }
       } else {
+        pic.remove();
         document.getElementById("t").innerHTML = "LINK NAY DELL CO ANH";
-      }
-
-      if (!srcVideo) {
-        createTag(music, data.music);
-        createDownloadTag(video, data.play);
-        createTag(video, data.play);
-        createDownloadTag(music, data.music);
-      } else {
-        srcVideo.remove();
-        downVideo.remove();
-        srcMusic.remove();
-        downMusic.remove();
-        createTag(music, data.music);
-        createDownloadTag(video, data.play);
-        createTag(video, data.play);
-        createDownloadTag(music, data.music);
       }
     } else {
       console.log(res.data.code);
@@ -81,29 +73,6 @@ function getData(api, url) {
   });
 }
 
-function createTag(element, data) {
-  const createTag = document.createElement("a");
-  createTag.textContent = "Nhấp vào đây để xem trước!";
-  createTag.href = data;
-  createTag.className = "previewURL";
-  createTag.target = "_blank";
-  element.appendChild(createTag);
-}
-// function createDownloadTag(element, data) {
-//   fetch(data)
-//     .then((res) => res.blob())
-//     .then((blob) => {
-//       const file = new File([blob], "image", { type: blob.type });
-//       const url = URL.createObjectURL(file);
-//       console.log(url);
-//       const createTag = document.createElement("a");
-//       createTag.textContent = "Nhấp vào đây để tải!";
-//       createTag.className = "downURL";
-//       createTag.href = url;
-//       createTag.download = "Tiktok Download by KimiZK";
-//       element.appendChild(createTag);
-//     });
-// }
 function test(element, data) {
   fetch(data)
     .then((res) => res.blob())
