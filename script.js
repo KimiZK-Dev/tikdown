@@ -1,26 +1,37 @@
+const ePreVid = document.createElement("div");
+const title = document.querySelector(".pagePreview .title");
+ePreVid.className = "preVid";
+ePreVid.innerHTML =
+  '<img src="https://i.ibb.co/8dGJs8h/image.png" alt="Pic-Preview">';
+
+title.insertAdjacentElement("afterend", ePreVid);
+
 const apiLink = "https://www.tikwm.com/api/?url=";
 const e = {
   des: document.querySelector(".des"),
   info: document.querySelector(".info"),
-  size: document.querySelector(".size"),
+  container: document.querySelector("#s2 .container"),
+
   ID: document.querySelector(".authorID"),
   nickname: document.querySelector(".authorName"),
   title: document.querySelector(".title"),
   comment_count: document.querySelector(".comment_count"),
   digg_count: document.querySelector(".digg_count"),
   download_count: document.querySelector(".download_count"),
-  play: document.querySelector(".play_count"),
   duration: document.querySelector(".duration"),
+  play: document.querySelector(".play_count"),
+  size: document.querySelector(".size"),
+
+  pagePre: document.querySelector(".pagePreview"),
   preview: document.querySelector(".preVid"),
+  // preview2: document.querySelector(".pagePreview .preVid"),
   preVid: document.querySelector(".preVid img"),
   prePics: document.querySelector(".prePics"),
   pic: document.querySelectorAll(".pic"),
   pageDown: document.querySelector(".pageDown"),
-  downPic: document.querySelector(".downPic"),
-  imgPreview: document.querySelector(".preVid img"),
+  downPics: document.querySelector(".downPics"),
   downVid: document.querySelector(".downVid"),
   downAudio: document.querySelector(".downAudio"),
-  container: document.querySelector("#s2 .container"),
 };
 
 async function fetchData(api, url) {
@@ -105,6 +116,7 @@ async function getData(api, url) {
       }`,
     },
   ];
+
   if (!e.info) {
     const infoDiv = document.createElement("div");
     infoDiv.className = "info";
@@ -114,7 +126,7 @@ async function getData(api, url) {
       const icon = document.createElement("i");
       const span = document.createElement("span");
 
-      div.className = "i1";
+      div.className = "infoThis";
       icon.className = field.icon;
       span.className = field.className;
       span.innerHTML = field.text;
@@ -134,77 +146,110 @@ async function getData(api, url) {
 
   if (data.images) {
     async function processImages() {
-      if (e.pic) {
-        const ePics = e.prePics.querySelectorAll(".pic");
-        // e.downPic.remove();
-        ePics.forEach((picElement) => {
-          picElement.remove();
-        });
-        console.log("ok");
+      if (e.pic || e.pageDown) {
+        if (e.pic) {
+          e.prePics
+            .querySelectorAll(".pic")
+            .forEach((picElement) => picElement.remove());
+        }
+
+        if (e.pageDown) {
+          e.pageDown
+            .querySelectorAll(".downPics")
+            .forEach((downElement) => downElement.remove());
+        } else {
+          console.log("no");
+        }
       }
-      if (data.images) {
-        e.preview.remove();
-        e.downVid.remove();
-        getDataForVid(e.downAudio, data.play);
-        const zip = new JSZip();
-        const folder = zip.folder("images");
 
-        data.images.forEach(async (imageUrl, i) => {
-          const imageDiv = document.createElement("div");
-          const img = document.createElement("img");
-          const downLink = document.createElement("a");
+      e.preview.remove();
+      e.downVid.remove();
 
-          imageDiv.className = "pic";
-          img.src = imageUrl;
+      getDataForVid(e.downAudio, data.music);
+      const zip = new JSZip();
+      const folder = zip.folder("images");
 
-          const { url, file } = await getDataForPic(imageUrl);
+      data.images.forEach(async (imageUrl, i) => {
+        const imageDiv = document.createElement("div");
+        const img = document.createElement("img");
+        const downLink = document.createElement("a");
 
-          if (url && file) {
-            downLink.href = url;
-            downLink.download = `Ảnh ${i + 1}`;
-            downLink.className = "downPic";
-            downLink.textContent = "Tải về";
+        imageDiv.className = "pic";
+        img.src = imageUrl;
 
-            folder.file(`image${i + 1}.${file.type.split("/")[1]}`, file);
+        const { url, file } = await getDataForPic(imageUrl);
 
-            imageDiv.appendChild(img);
-            imageDiv.appendChild(downLink);
-            e.prePics.appendChild(imageDiv);
-          } else {
-            console.error("Failed to create download URL for image", imageUrl);
-          }
-        });
+        if (url && file) {
+          downLink.href = url;
+          downLink.download = `Ảnh ${i + 1}`;
+          downLink.className = "downPic";
+          downLink.textContent = "Tải về";
 
-        const zipButton = document.createElement("a");
-        const icon = document.createElement("i");
+          folder.file(`image${i + 1}.${file.type.split("/")[1]}`, file);
 
-        zipButton.className = "downPics";
-        icon.className = "fa-duotone fa-download";
+          imageDiv.appendChild(img);
+          imageDiv.appendChild(downLink);
+          e.prePics.appendChild(imageDiv);
+        } else {
+          console.error("Failed to create download URL for image", imageUrl);
+        }
+      });
 
-        zipButton.appendChild(icon);
-        zipButton.appendChild(document.createTextNode("ALBUM"));
+      const zipButton = document.createElement("a");
+      const icon = document.createElement("i");
 
-        zipButton.addEventListener("click", async () => {
-          const content = await zip.generateAsync({ type: "blob" });
-          const zipUrl = URL.createObjectURL(content);
-          const downLink = document.createElement("a");
-          downLink.href = zipUrl;
-          downLink.download = "images.zip";
-          downLink.click();
-          URL.revokeObjectURL(zipUrl);
-        });
+      zipButton.className = "downPics";
+      icon.className = "fa-duotone fa-download";
 
-        e.pageDown.insertBefore(zipButton, e.pageDown.firstChild);
+      zipButton.appendChild(icon);
+      zipButton.appendChild(document.createTextNode("ALBUM"));
+
+      zipButton.addEventListener("click", async () => {
+        const content = await zip.generateAsync({ type: "blob" });
+        const zipUrl = URL.createObjectURL(content);
+        const downLink = document.createElement("a");
+        downLink.href = zipUrl;
+        downLink.download = "images.zip";
+        downLink.click();
+        URL.revokeObjectURL(zipUrl);
+      });
+
+      e.pageDown.insertBefore(zipButton, e.pageDown.firstChild);
+    }
+    processImages();
+  } else {
+    if (e.pic || e.pageDown) {
+      if (e.pic) {
+        e.prePics
+          .querySelectorAll(".pic")
+          .forEach((picElement) => picElement.remove());
+      }
+
+      if (e.pageDown) {
+        e.pageDown
+          .querySelectorAll(".downPics")
+          .forEach((downElement) => downElement.remove());
       } else {
-        document.getElementById("t").innerHTML = "LINK NÀY KHÔNG CÓ ẢNH";
+        console.log("no");
       }
     }
 
-    processImages();
-  } else {
-    e.preVid.src = data.ai_dynamic_cover;
-    getDataForVid(e.downVid, data.play);
-    getDataForVid(e.downAudio, data.play);
+    if (e.preview) {
+      console.log(e.preview);
+      e.preVid.src = data.ai_dynamic_cover;
+      getDataForVid(e.downVid, data.play);
+      getDataForVid(e.downAudio, data.music);
+    } else {
+      console.log("!");
+      const createPre = document.createElement("div");
+      const preVid = document.createElement("img");
+
+      createPre.className = "preVid";
+      preVid.src = data.ai_dynamic_cover;
+      preVid.alt = "";
+      e.pagePre.insertBefore(createPre, e.pagePre.firstChild);
+      createPre.appendChild(preVid);
+    }
   }
 }
 
