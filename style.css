@@ -153,6 +153,8 @@ body{
             text-align: center;
             padding-bottom: 5px;  
             border-bottom: 2px solid var(--clr4); 
+            border-radius: 10px;
+
             margin-bottom: 5px;
         }
         .fa-duotone{
@@ -181,6 +183,7 @@ body{
             text-align: center;
             padding-bottom: 5px;  
             border-bottom: 2px solid var(--clr4); 
+            border-radius: 10px;
             margin-bottom: 5px;
         }
         .prePics{
