@@ -95,6 +95,7 @@ body{
                 }
             }
             .enter-btn{
+                cursor: pointer;
                 display: flex;
                 align-items: center;
                 padding: 8px 10px;
@@ -112,6 +113,7 @@ body{
             display: flex;
             justify-content: space-around;
             .paste-btn, .clear-btn{
+                cursor: pointer;
                 display: flex;
                 align-items: center;
                 padding: 10px 25px;
@@ -152,6 +154,9 @@ body{
             padding-bottom: 5px;  
             border-bottom: 2px solid var(--clr4); 
             margin-bottom: 5px;
+        }
+        .fa-duotone{
+            margin-right: 5px;
         }
     }
 }
@@ -225,6 +230,7 @@ body{
             justify-content: space-around;
             bottom: 12%;
             .downVid, .downAudio, .downPics{
+                cursor: pointer;
                 color: #000;
                 background-color: var(--clr3);
                 padding: 3% 7%;
