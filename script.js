@@ -1,10 +1,9 @@
-const ePreVid = document.createElement("div");
+// const ePreVid = document.createElement("div");
 const title = document.querySelector(".pagePreview .title");
-ePreVid.className = "preVid";
-ePreVid.innerHTML =
-  '<img src="https://i.ibb.co/8dGJs8h/image.png" alt="Pic-Preview">';
-
-title.insertAdjacentElement("afterend", ePreVid);
+// ePreVid.className = "preVid";
+// ePreVid.innerHTML =
+//   '<img src="https://i.ibb.co/8dGJs8h/image.png" alt="Pic-Preview">';
+// title.insertAdjacentElement("afterend", ePreVid);
 
 const apiLink = "https://www.tikwm.com/api/?url=";
 const e = {
@@ -24,7 +23,6 @@ const e = {
 
   pagePre: document.querySelector(".pagePreview"),
   preview: document.querySelector(".preVid"),
-  // preview2: document.querySelector(".pagePreview .preVid"),
   preVid: document.querySelector(".preVid img"),
   prePics: document.querySelector(".prePics"),
   pic: document.querySelectorAll(".pic"),
@@ -146,7 +144,7 @@ async function getData(api, url) {
 
   if (data.images) {
     async function processImages() {
-      if (e.pic || e.pageDown) {
+      if (e.pic || e.pageDown || e.pagePre) {
         if (e.pic) {
           e.prePics
             .querySelectorAll(".pic")
@@ -157,13 +155,15 @@ async function getData(api, url) {
           e.pageDown
             .querySelectorAll(".downPics")
             .forEach((downElement) => downElement.remove());
-        } else {
-          console.log("no");
+        }
+
+        if (e.pagePre) {
+          const pre = e.pagePre.querySelectorAll(".preVid");
+          const downBtn = e.pagePre.querySelectorAll(".downVid");
+          pre.forEach((el) => el.remove());
+          downBtn.forEach((el) => el.remove());
         }
       }
-
-      e.preview.remove();
-      e.downVid.remove();
 
       getDataForVid(e.downAudio, data.music);
       const zip = new JSZip();
@@ -234,22 +234,37 @@ async function getData(api, url) {
       }
     }
 
-    if (e.preview) {
-      console.log(e.preview);
-      e.preVid.src = data.ai_dynamic_cover;
-      getDataForVid(e.downVid, data.play);
-      getDataForVid(e.downAudio, data.music);
-    } else {
-      console.log("!");
-      const createPre = document.createElement("div");
-      const preVid = document.createElement("img");
-
-      createPre.className = "preVid";
-      preVid.src = data.ai_dynamic_cover;
-      preVid.alt = "";
-      e.pagePre.insertBefore(createPre, e.pagePre.firstChild);
-      createPre.appendChild(preVid);
+    if (e.pagePre) {
+      const pre = e.pagePre.querySelectorAll(".preVid");
+      const downBtn = e.pagePre.querySelectorAll(".downVid");
+      pre.forEach((el) => el.remove());
+      downBtn.forEach((el) => el.remove());
     }
+
+    const createPre = document.createElement("div");
+    const createDownVid = document.createElement("a");
+    const icon = document.createElement("i");
+    const preVid = document.createElement("img");
+
+    createPre.className = "preVid";
+    preVid.src = data.ai_dynamic_cover;
+    preVid.alt = "";
+    e.preVid.src = data.ai_dynamic_cover;
+
+    icon.className = "fa-duotone fa-download";
+    createDownVid.appendChild(icon);
+    createDownVid.appendChild(document.createTextNode("VIDEO"));
+    createDownVid.className = "downVid";
+    createDownVid.download = "Tiktok Download by KimiZK";
+    createDownVid.href = "";
+
+    e.pagePre.appendChild(createPre);
+    createPre.appendChild(preVid);
+    title.insertAdjacentElement("afterend", createPre);
+    e.pageDown.insertBefore(createDownVid, e.pageDown.firstChild);
+
+    getDataForVid(createDownVid, data.play);
+    getDataForVid(e.downAudio, data.music);
   }
 }
 
