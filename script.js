@@ -1,10 +1,3 @@
-// const ePreVid = document.createElement("div");
-const title = document.querySelector(".pagePreview .title");
-// ePreVid.className = "preVid";
-// ePreVid.innerHTML =
-//   '<img src="https://i.ibb.co/8dGJs8h/image.png" alt="Pic-Preview">';
-// title.insertAdjacentElement("afterend", ePreVid);
-
 const apiLink = "https://www.tikwm.com/api/?url=";
 const e = {
   des: document.querySelector(".des"),
@@ -21,6 +14,7 @@ const e = {
   play: document.querySelector(".play_count"),
   size: document.querySelector(".size"),
 
+  title2: document.querySelector(".pagePreview .title"),
   pagePre: document.querySelector(".pagePreview"),
   preview: document.querySelector(".preVid"),
   preVid: document.querySelector(".preVid img"),
@@ -31,6 +25,10 @@ const e = {
   downVid: document.querySelector(".downVid"),
   downAudio: document.querySelector(".downAudio"),
 };
+
+setTimeout(() => {
+  document.querySelector(".loadGIF").style.display = "none";
+}, 1500);
 
 async function fetchData(api, url) {
   try {
@@ -260,7 +258,7 @@ async function getData(api, url) {
 
     e.pagePre.appendChild(createPre);
     createPre.appendChild(preVid);
-    title.insertAdjacentElement("afterend", createPre);
+    title2.insertAdjacentElement("afterend", createPre);
     e.pageDown.insertBefore(createDownVid, e.pageDown.firstChild);
 
     getDataForVid(createDownVid, data.play);
