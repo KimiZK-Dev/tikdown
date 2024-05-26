@@ -19,6 +19,7 @@
     /* user-select: none; */
 }
 
+
 :root{
     --clr: #C5FFF8;
     --clr2: #96EFFF;
@@ -28,8 +29,47 @@
 
 
 body{
+    width: 100%;
+    height: 100vh;
     background-color: var(--clr);
 }
+
+@keyframes fade-down {
+    0%{
+        opacity: 1;
+    }
+    100%{
+        opacity: 0;
+    }
+}
+
+.loadGIF{
+    position: absolute;
+    animation: fade-down 1.5s ease-in;
+    opacity: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    font-size: 25px;
+    z-index: 999;
+    width: 100%;
+    height: 100vh;
+    background-color: #F6FDF9;
+    overflow: hidden;
+    p{
+        margin-top: -15%;
+    }
+    .gif{
+        scale: 0.5;
+        img{
+            object-fit: cover;
+            width: 100%;
+            height: 100%;
+        }
+    }
+}
+
 
 #s1{
     background-color: var(--clr2);
