@@ -258,7 +258,7 @@ async function getData(api, url) {
 
     e.pagePre.appendChild(createPre);
     createPre.appendChild(preVid);
-    title2.insertAdjacentElement("afterend", createPre);
+    e.title2.insertAdjacentElement("afterend", createPre);
     e.pageDown.insertBefore(createDownVid, e.pageDown.firstChild);
 
     getDataForVid(createDownVid, data.play);
