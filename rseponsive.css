@@ -1,0 +1,66 @@
+@import url('./style.css');
+
+@media screen and (min-width: 344px) and (min-height: 882px) {
+    #s1 .container .head{
+        width: 100%;
+    }
+    
+    #s3 .pagePreview .preVid{
+        width: 80%;
+    }
+}
+
+@media screen and (min-width: 768px) and (min-height: 1024px) {
+    #s1 .container .head{
+        width: 50%;
+    }
+    
+    #s3 .pagePreview .preVid{
+        width: 60%;
+    }
+}
+
+@media screen and (min-width: 1024px) and (min-height: 1366px) {
+    #s1 .container .head{
+        width: 40%;
+    }
+    
+    #s3 .pagePreview .preVid{
+        width: 60%;
+    }
+}
+
+@media screen and (min-width: 1024px) and (min-height: 600px) {
+    #s1 .container .head{
+        width: 35%;
+    }
+    
+    #s3 .pagePreview .preVid{
+        width: 60%;
+    }
+}
+
+@media screen and (min-width: 1920px) and (min-height: 1080px) {
+    #s1 .container .head{
+        width: 20%;
+    }
+
+    #s2 .nameInfo,#s2 .des, #s2 .info{
+        font-size: 25px !important;
+    }
+    
+    #s3 .pagePreview .preVid{
+        width: 40%;
+        margin-bottom: 30px;
+    }
+
+    #s3 .pagePreview .pageDown{
+        width: 30%;
+        scale: 1.5;
+    }
+
+    #s3 .title{
+        font-size: 25px;
+    }
+
+}
