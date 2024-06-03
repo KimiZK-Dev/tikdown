@@ -108,8 +108,8 @@ async function getData(api, url) {
       icon: "fa-duotone fa-file",
       className: "size",
       text: `Dung lượng: ${
-        data.size
-          ? (data.size / 1000000).toFixed(3) + "MB"
+        data.hd_size
+          ? (data.hd_size / 1000000).toFixed(3) + "MB"
           : "Mỗi ảnh kích thước khác nhau!"
       }`,
     },
