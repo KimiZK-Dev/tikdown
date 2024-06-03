@@ -1,4 +1,5 @@
-const apiLink = "https://www.tikwm.com/api/?url=";
+// const apiLink = "https://www.tikwm.com/api/?url=";
+const apiLink = "https://apidown.site/api/tiktok/v1?link=";
 const e = {
   des: document.querySelector(".des"),
   info: document.querySelector(".info"),
@@ -45,6 +46,7 @@ async function fetchData(api, url) {
     }
   } catch (error) {
     console.error("Error fetching data:", error);
+    console.log(res.data);
     alert("Có lỗi xảy ra khi lấy dữ liệu!");
     return null;
   }
@@ -261,7 +263,7 @@ async function getData(api, url) {
     e.title2.insertAdjacentElement("afterend", createPre);
     e.pageDown.insertBefore(createDownVid, e.pageDown.firstChild);
 
-    getDataForVid(createDownVid, data.play);
+    getDataForVid(createDownVid, data.hdplay);
     getDataForVid(e.downAudio, data.music);
   }
 }
