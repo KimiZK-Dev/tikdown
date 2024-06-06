@@ -1,10 +1,11 @@
 // const apiLink = "https://www.tikwm.com/api/?url=";
 const apiLink = "https://apidown.site/api/tiktok/v1?link=";
 const e = {
+  loadGIF: document.querySelector(".loadGIF"),
+
   des: document.querySelector(".des"),
   info: document.querySelector(".info"),
   container: document.querySelector("#s2 .container"),
-
   ID: document.querySelector(".authorID"),
   nickname: document.querySelector(".authorName"),
   title: document.querySelector(".title"),
@@ -28,7 +29,7 @@ const e = {
 };
 
 setTimeout(() => {
-  document.querySelector(".loadGIF").style.display = "none";
+  e.loadGIF.style.display = "none";
 }, 1500);
 
 async function fetchData(api, url) {
@@ -38,7 +39,6 @@ async function fetchData(api, url) {
       e.des.remove();
       return res.data.data;
     } else {
-      console.error(`Error code: ${res.data.code}`);
       alert(
         "Vui lòng nhập link cần lấy dữ liệu!!\nNếu không được bạn vui lòng kiểm tra lại link <3"
       );
@@ -63,6 +63,31 @@ async function getData(api, url) {
   console.log(data);
   if (!data) return;
 
+  if (e.downVid.href == "https://kimizk-dev.github.io/tikdown/download.html") {
+    const loadWrap = document.createElement("div");
+    const loader = document.createElement("span");
+    const loaderInner = document.createElement("span");
+    const loaderText = document.createElement("p");
+
+    loadWrap.id = "loader-wrapper";
+    loader.className = "loader";
+    loaderInner.className = "loader-inner";
+    loaderText.className = "loader-text";
+    loaderText.textContent = "Wait 10 seconds...";
+
+    document.body.appendChild(loadWrap);
+    loadWrap.appendChild(loader);
+    loader.appendChild(loaderInner);
+    loadWrap.appendChild(loaderText);
+  }
+
+  document.getElementById("s3").style.display = "none";
+  setTimeout(() => {
+    document.getElementById("s3").style.display = "block";
+    document.getElementById("loader-wrapper").remove();
+  }, 10000);
+
+  // Form info
   const fields = [
     {
       icon: "fa-duotone fa-id-badge",
@@ -108,13 +133,14 @@ async function getData(api, url) {
       icon: "fa-duotone fa-file",
       className: "size",
       text: `Dung lượng: ${
-        data.hd_size
-          ? (data.hd_size / 1000000).toFixed(3) + "MB"
+        data.size
+          ? (data.size / 1000000).toFixed(3) + "MB"
           : "Mỗi ảnh kích thước khác nhau!"
       }`,
     },
   ];
 
+  //  Get info
   if (!e.info) {
     const infoDiv = document.createElement("div");
     infoDiv.className = "info";
@@ -142,6 +168,7 @@ async function getData(api, url) {
     });
   }
 
+  // Images
   if (data.images) {
     async function processImages() {
       if (e.pic || e.pageDown || e.pagePre) {
@@ -217,7 +244,9 @@ async function getData(api, url) {
       e.pageDown.insertBefore(zipButton, e.pageDown.firstChild);
     }
     processImages();
-  } else {
+  }
+  // Video
+  else {
     if (e.pic || e.pageDown) {
       if (e.pic) {
         e.prePics
